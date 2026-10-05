@@ -1,0 +1,10 @@
+{
+  "name": "vibecodestorage-project-desk",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A local Node.js app that remembers project settings with VibeCodeStorage",
+  "engines": { "node": ">=24" },
+  "scripts": { "start": "node server.mjs" },
+  "dependencies": { "vibecodestorage": "0.1.2" }
+}
