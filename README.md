@@ -22,7 +22,7 @@ the backend run ID changes to demonstrate that a new process started.
 Before creating a store, read the [pilot terms](https://vibecodestorage.com/terms.html)
 and [privacy notice](https://vibecodestorage.com/privacy.html). This is a free,
 limited pilot: 1,000 rows, 2 MB encrypted storage, 10,000 metered requests/month,
-and total pilot capacity of 100 stores. Use non-sensitive sample data and keep backups.
+and total pilot capacity of 200 active stores. New stores need a successful write within four hours; unused provisional stores expire. Use non-sensitive sample data and keep backups.
 
 ## Credentials and safety
 
