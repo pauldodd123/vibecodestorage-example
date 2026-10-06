@@ -61,3 +61,5 @@ path, use that path instead. Do not delete another project's credentials.
 
 This repository contains the example app only. The hosted service implementation
 is private. The example code is MIT licensed; the SDK has its own license.
+
+Setup uses client 0.1.4 and storage-setup.mjs. It saves a private pending creation request before networking and reuses it after interruption. A rate limit stops setup with the server retry time; it does not start a background retry loop. Preserve .private/ when restarting.

@@ -1,29 +1,14 @@
 import http from 'node:http';
-import { mkdir, open, readFile, unlink } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { randomUUID } from 'node:crypto';
-import { VibeCodeStorage } from 'vibecodestorage';
+import { openStore } from './storage-setup.mjs';
 
 process.umask(0o077);
 const here = dirname(fileURLToPath(import.meta.url));
 const credentialsPath = resolve(process.env.VCS_CREDENTIALS_FILE || resolve(here, '.private/store.json'));
-let store;
-try { store = new VibeCodeStorage(JSON.parse(await readFile(credentialsPath, 'utf8'))); }
-catch (error) {
-  if (error.code !== 'ENOENT') throw new Error('Cannot read the saved store. Keep the credential file and fix it; do not create a replacement store.');
-  await mkdir(dirname(credentialsPath), { recursive: true, mode: 0o700 });
-  // Reserve the local file before provisioning so simultaneous starts cannot create two stores.
-  const file = await open(credentialsPath, 'wx', 0o600);
-  try {
-    ({ store } = await VibeCodeStorage.create({ endpoint: process.env.VCS_ENDPOINT || 'https://api.vibecodestorage.com' }));
-    await file.writeFile(JSON.stringify(store.credentials) + '\n');
-  } catch (error) {
-    if (store) await store.destroy().catch(() => {});
-    await unlink(credentialsPath).catch(() => {});
-    throw error;
-  } finally { await file.close(); }
-}
+const store = await openStore({file:credentialsPath,endpoint:process.env.VCS_ENDPOINT || 'https://api.vibecodestorage.com'});
 const runId = randomUUID();
 const port = Number(process.env.PORT || 3210);
 const defaults = { project: 'My next idea', theme: 'forest', nextStep: 'Make the first useful thing.' };
